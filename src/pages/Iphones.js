@@ -7,8 +7,8 @@ const Iphones = () => {
 
   const getOrders = async (event) => {
     event.preventDefault();
+    setIphones([]);
     const orders = await OrderService.get('iphones');
-    console.log(orders);
     setIphones(orders);
   };
 

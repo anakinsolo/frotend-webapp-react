@@ -1,8 +1,8 @@
 import { NavLink, Routes, Route } from 'react-router-dom';
-import Orders from './pages/Orders';
 import Iphones from './pages/Iphones';
 import Reports from './pages/Reports';
 import OrderForm from './pages/OrderForm.js';
+import Statistics from './pages/Statistics';
 
 const App = () => {
   return (
@@ -15,7 +15,7 @@ const App = () => {
         <NavLink to="/create">Create New Order</NavLink>
       </div>
       <Routes>
-        <Route path="/orders" element={<Orders />} />
+        <Route path="/orders" element={<Statistics />} />
         <Route path="/iphones" element={<Iphones />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/create" element={<OrderForm />} />

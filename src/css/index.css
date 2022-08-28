@@ -87,3 +87,15 @@ div form {
   display: inline-block;
   width: 100%;
 }
+
+.error {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+}
+
+.success {
+  padding: 20px;
+  background-color: #0cb857;
+  color: white;
+}

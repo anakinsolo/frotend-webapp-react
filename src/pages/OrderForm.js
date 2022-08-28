@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import Checkbox from '../components/Form/Checkbox.js';
+import Input from '../components/Form/Input';
+import SubmitButton from '../components/Form/SubmitButton.js';
+import ResultMessage from '../components/ResultMessage.js';
 import OrderService from '../services/OrderService';
 
 const OrderForm = () => {
@@ -7,10 +11,12 @@ const OrderForm = () => {
   const [type, setType] = useState('');
   const [desc, setDesc] = useState('');
   const [isSample, setIsSample] = useState(false);
-  const [note, setNote] = useState([]);
+  const [note, setNote] = useState();
+  const [err, setErr] = useState('');
 
   const submitForm = async (event) => {
     event.preventDefault();
+    cleanUp();
     const data = {
       'manu' : manu,
       'brand' : brand,
@@ -19,36 +25,31 @@ const OrderForm = () => {
       'is_sample_order' : isSample
     };
 
-    const res = await OrderService.post('save', data);
-    setNote(res);
+    try {
+      const res = await OrderService.post('save', data);
+      setNote(res);
+    } catch (err) {
+      setErr(err.message);
+    }
+  };
+
+  const cleanUp = () => {
+    setNote();
+    setErr('');
   };
 
   return (
     <div>
       <form onSubmit={submitForm}>
-        <div>
-          <label htmlFor="manu">Manufacturer:</label>
-          <input type="text" id="manu" value={manu} onChange={(event) => setManu(event.target.value)}/>
-        </div>
-        <div>
-          <label htmlFor="brand">Brand:</label>
-          <input type="text" id="brand" value={brand} onChange={(event) => setBrand(event.target.value)}/>
-        </div>
-        <div>
-          <label htmlFor="type">Type:</label>
-          <input type="text" id="type" value={type} onChange={(event) => setType(event.target.value)}/>
-        </div>
-        <div>
-          <label htmlFor="desc">Description:</label>
-          <input type="text" id="desc" value={desc} onChange={(event) => setDesc(event.target.value)}/>
-        </div>
-        <div>
-          <input type="checkbox" id="is_sample_order" value={isSample} onChange={() => setIsSample(!isSample)}/>
-          <label htmlFor="is_sample_order">Create Sample Order</label>
-        </div>
-        <input type="submit" value="Submit"/>
+        <Input label='Manufacturer' inputName='manu' inputValue={manu} setInputValue={(event) => setManu(event.target.value)} />
+        <Input label='Brand' inputName='brand' inputValue={brand} setInputValue={(event) => setBrand(event.target.value)} />
+        <Input label='Type' inputName='type' inputValue={type} setInputValue={(event) => setType(event.target.value)} />
+        <Input label='Description' inputName='desc' inputValue={desc} setInputValue={(event) => setDesc(event.target.value)} />
+        <Checkbox value={isSample} setValue={() => setIsSample(!isSample)} />
+        <SubmitButton />
       </form>
-      {note.message} {note.id}
+      {err && <ResultMessage name='error' msg={err} />}
+      {note && <ResultMessage name='success' msg={note.message} noteId={note.id} />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const BASE_URI = 'http://fixably.local/';
+const BASE_URI = process.env.REACT_APP_BASE_BACKEND_URI;
 
 const get = async (location) => {
   let res = await axios.get(`${BASE_URI}${location}`);
